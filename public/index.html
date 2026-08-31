@@ -27,11 +27,481 @@ function spawn(){const c=L[lev],r=$('actors');r.innerHTML='';for(let i=0;i<=c.d;
 function pos(e){const c=L[lev],a=$('arena'),x=8+Math.random()*(a.clientWidth-c.s-16),y=75+Math.random()*(a.clientHeight-c.s-115);e.style.left=x+'px';e.style.top=y+'px';e.style.transform='rotate('+(Math.random()*18-9)+'deg)'}
 function catchIt(e){if(done)return;if(e.dataset.real==='1'){hit++;score+=Math.round(100*L[lev].x+t*4);$('sc').textContent=score;$('prog').style.width=(hit/L[lev].need*100)+'%';pos(e);if(hit>=L[lev].need)next()}else{score=Math.max(0,score-75);$('sc').textContent=score;toast('Oops! Decoy Asur 😈  −75')}}
 function next(){if(done)return;done=true;clear();if(lev===L.length-1){finish();return}toast('Level '+(lev+1)+' cleared! 🔥');setTimeout(()=>{lev++;level()},600)}
-function finish(){clear();show('result');$('final').textContent=score+' points';$('title').textContent=score>=1800?'🏆 Pujo Champion!':'🌺 Pujo Ready!';$('msg').textContent=score>=1800?'Asur is officially worried! You conquered all 5 levels.':score>=900?'Excellent! Your fingers are ready for Pujo!':'Asur escaped this time — try again and beat your score!'}
+function finish(){clear();show('result');$('final').textContent=score+' points';$('title').textContent=score>=1800?'🏆 Pujo Champion!':'🌺 Pujo Ready!';$('msg').textContent=score>=1800?'Asur is officially worried! You conquered all 10 levels.':score>=900?'Excellent! Your fingers are ready for Pujo!':'Asur escaped this time — try again and beat your score!'}
 async function leader(){show('board');$('scores').innerHTML='<p>Loading live leaderboard…</p>';try{const r=await fetch(API_BASE+'/api/scores?limit=10',{headers:{'Accept':'application/json'}});if(!r.ok)throw new Error('leaderboard');const b=await r.json();$('scores').innerHTML=b.length?'<table><tr><th>#</th><th>Name</th><th>Score</th></tr>'+b.map((x,i)=>'<tr><td>'+(i+1)+'</td><td>'+safe(x.name)+'</td><td><b>'+Number(x.score).toLocaleString()+'</b></td></tr>').join('')+'</table>':'<p>Be the first Srijonee Pujo Champion!</p>'}catch(e){$('scores').innerHTML='<p>Leaderboard is temporarily unavailable. Please try again.</p>'}}
 async function submit(){let n=$('name').value.trim();if(!n)return toast('Please enter your name');if(n.length>24)return toast('Name is too long');let b={name:n,score:score};try{const r=await fetch(API_BASE+'/api/scores',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(b)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'submit');toast('Score registered! 🏆');setTimeout(()=>leader(),500)}catch(e){toast('Could not register score. Try again.')}}
 function safe(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
 function share(){let n=$('name').value.trim()||'I';let txt=`🌺 ${n} scored ${score} points in Srijonee Durga Pujo 2026 — Catch the Asur!\n\nCan you beat my score? 😎\n\nPlay: ${location.href}\n\nSrijonee • Celebrating Culture, Serving Society`;window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank')}
 function shareBoard(){window.open('https://wa.me/?text='+encodeURIComponent('🏆 Srijonee Pujo Challenge! Can you catch Asur and make the leaderboard? 🌺\n\nPlay: '+location.href),'_blank')}
 function toast(s){let e=$('toast');e.textContent=s;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1200)}
-</script></body></html>
+</script>
+<script>
+(() => {
+  const LEVEL_TIME = 20;
+  const TOTAL_LEVELS = 10;
+
+  // Different decoys progressively increase complexity.
+  const decoysByLevel = [
+    ["🌺"],
+    ["🌺","🪔"],
+    ["🌺","🪔","🥁"],
+    ["🌺","🪔","🥁","🍎"],
+    ["🌺","🪔","🥁","🍎","⭐"],
+    ["🌺","🪔","🥁","🍎","⭐","🍬"],
+    ["🌺","🪔","🥁","🍎","⭐","🍬","🎈"],
+    ["🌺","🪔","🥁","🍎","⭐","🍬","🎈","🎨"],
+    ["🌺","🪔","🥁","🍎","⭐","🍬","🎈","🎨","🎯"],
+    ["🌺","🪔","🥁","🍎","⭐","🍬","🎈","🎨","🎯","🧿"]
+  ];
+
+  let level = 1, score = 0, timeLeft = LEVEL_TIME;
+  let levelTimer = null, moveTimer = null, running = false;
+  let misses = 0;
+
+  const $ = id => document.getElementById(id);
+  const byText = (selector, text) => [...document.querySelectorAll(selector)]
+      .find(el => el.textContent.trim().toLowerCase() === text.toLowerCase());
+
+  function ensureStyles() {
+    if (document.getElementById("v4-style")) return;
+    const s = document.createElement("style");
+    s.id = "v4-style";
+    s.textContent = `
+      .v4-hud{display:flex;justify-content:space-between;align-items:center;gap:10px;
+        font-weight:900;margin:10px 0;font-size:16px}
+      .v4-level{background:#fff0cf;border-radius:999px;padding:7px 11px;color:#76550b}
+      .v4-score{color:#c53030}
+      .v4-timer{font-variant-numeric:tabular-nums}
+      .v4-target,.v4-decoy{position:absolute;display:flex;align-items:center;justify-content:center;
+        width:68px;height:68px;border-radius:50%;user-select:none;touch-action:manipulation;
+        cursor:pointer;filter:drop-shadow(0 5px 3px #0002);font-size:42px;
+        transition:transform .08s ease}
+      .v4-target{z-index:5}
+      .v4-decoy{z-index:4}
+      .v4-overlay{position:fixed;inset:0;background:#0007;display:flex;align-items:center;
+        justify-content:center;padding:20px;z-index:10000}
+      .v4-modal{width:min(420px,100%);background:#fff;border-radius:26px;padding:28px 22px;
+        text-align:center;box-shadow:0 20px 60px #0005}
+      .v4-icon{font-size:68px;line-height:1;margin-bottom:10px}
+      .v4-title{font-size:36px;font-weight:950;margin:5px 0 8px;color:#c53030}
+      .v4-sub{font-size:16px;line-height:1.45;margin-bottom:16px}
+      .v4-modal button{width:100%;margin-top:10px}
+      .v4-progress{height:8px;background:#eadfce;border-radius:999px;overflow:hidden;margin:8px 0 14px}
+      .v4-progress > div{height:100%;background:#c53030;width:0;transition:width .2s linear}
+    `;
+    document.head.appendChild(s);
+  }
+
+  function findArena() {
+    return document.querySelector("#arena,.arena,[data-arena]") || document.querySelector("main");
+  }
+
+  function setTextCandidates(map) {
+    // Best-effort compatibility with V3 IDs; if absent, create HUD in the game section.
+    if ($("level")) $("level").textContent = level;
+    if ($("time")) $("time").textContent = timeLeft;
+    if ($("score")) $("score").textContent = score;
+  }
+
+  function buildHUD(arena) {
+    const old = document.getElementById("v4-hud");
+    if (old) old.remove();
+    const hud = document.createElement("div");
+    hud.id = "v4-hud";
+    hud.className = "v4-hud";
+    hud.innerHTML = `
+      <span class="v4-level">Level <b id="v4-level">1</b>/10</span>
+      <span class="v4-timer">⏱ <b id="v4-time">20</b>s</span>
+      <span class="v4-score">🏆 <b id="v4-score">0</b></span>`;
+    arena.parentNode.insertBefore(hud, arena);
+    const prog = document.createElement("div");
+    prog.id = "v4-progress";
+    prog.className = "v4-progress";
+    prog.innerHTML = "<div></div>";
+    arena.parentNode.insertBefore(prog, arena);
+  }
+
+  function clearArena(arena) {
+    arena.querySelectorAll(".v4-target,.v4-decoy").forEach(e => e.remove());
+  }
+
+  function randomPos(arena, size=68) {
+    const pad = 8;
+    const w = Math.max(0, arena.clientWidth - size - pad*2);
+    const h = Math.max(0, arena.clientHeight - size - pad*2);
+    return {x: pad + Math.random()*w, y: pad + Math.random()*h};
+  }
+
+  function place(el, arena) {
+    const p = randomPos(arena, 68);
+    el.style.left = p.x + "px";
+    el.style.top = p.y + "px";
+    el.style.transform = `rotate(${Math.round(Math.random()*20-10)}deg)`;
+  }
+
+  function spawn(arena) {
+    clearArena(arena);
+    const target = document.createElement("div");
+    target.className = "v4-target";
+    target.textContent = "👹";
+    target.setAttribute("aria-label","Catch Asur");
+    target.addEventListener("pointerdown", e => {
+      e.preventDefault();
+      if (!running) return;
+      score += 100 * level;
+      misses = 0;
+      updateHUD();
+      place(target, arena);
+    });
+    arena.appendChild(target);
+
+    // Add one more decoy at each new level, with level-specific icons.
+    const decoys = decoysByLevel[level-1];
+    decoys.forEach(icon => {
+      const d = document.createElement("div");
+      d.className = "v4-decoy";
+      d.textContent = icon;
+      d.addEventListener("pointerdown", e => {
+        e.preventDefault();
+        if (!running) return;
+        misses++;
+        score = Math.max(0, score - 25 * level);
+        updateHUD();
+        d.style.transform = "scale(.75) rotate(18deg)";
+        setTimeout(() => { if (running) place(d, arena); }, 100);
+      });
+      arena.appendChild(d);
+      place(d, arena);
+    });
+    place(target, arena);
+  }
+
+  function updateHUD() {
+    const a = $("v4-level"), b = $("v4-time"), c = $("v4-score");
+    if (a) a.textContent = level;
+    if (b) b.textContent = timeLeft;
+    if (c) c.textContent = score;
+    const bar = document.querySelector("#v4-progress > div");
+    if (bar) bar.style.width = `${((LEVEL_TIME-timeLeft)/LEVEL_TIME)*100}%`;
+    setTextCandidates();
+  }
+
+  function stopTimers() {
+    clearInterval(levelTimer); clearInterval(moveTimer);
+    levelTimer = moveTimer = null;
+  }
+
+  function startLevel() {
+    const arena = findArena();
+    if (!arena) return;
+    running = true;
+    timeLeft = LEVEL_TIME;
+    misses = 0;
+    clearArena(arena);
+    spawn(arena);
+    updateHUD();
+
+    stopTimers();
+    // Speed increases by level: Asur/decoys reposition more often.
+    const moveEvery = Math.max(260, 850 - (level-1)*65);
+    moveTimer = setInterval(() => {
+      if (!running) return;
+      arena.querySelectorAll(".v4-target,.v4-decoy").forEach(e => place(e, arena));
+    }, moveEvery);
+
+    levelTimer = setInterval(() => {
+      timeLeft--;
+      updateHUD();
+      if (timeLeft <= 0) {
+        stopTimers();
+        running = false;
+        // A level is passed if the player caught Asur at least once.
+        const caught = score > 0; // score is cumulative, so this is true after any successful catch
+        // Track success per level separately.
+        const success = window.__srijoneeLevelHits > 0;
+        window.__srijoneeLevelHits = 0;
+        success ? levelPassed() : levelFailed();
+      }
+    },1000);
+  }
+
+  function levelPassed() {
+    showModal(
+      "🥁",
+      "Darun!",
+      level < TOTAL_LEVELS
+        ? `Level ${level} crossed! Asur is getting nervous.`
+        : `You conquered all 10 levels! Your final score is ${score}.`,
+      level < TOTAL_LEVELS ? "NEXT LEVEL" : "VIEW SCORE",
+      () => {
+        if (level < TOTAL_LEVELS) { level++; startLevel(); }
+        else finishGame();
+      },
+      level < TOTAL_LEVELS ? null : "DONE"
+    );
+  }
+
+  function levelFailed() {
+    showModal(
+      "😢",
+      "Dath Teri Ki",
+      `Asur escaped on Level ${level}. Your score is ${score}.`,
+      "PLAY AGAIN",
+      () => { level = 1; score = 0; startLevel(); },
+      "EXIT",
+      () => finishGame()
+    );
+  }
+
+  function showModal(icon,title,sub,primary,primaryFn,secondary,secondaryFn) {
+    document.querySelector(".v4-overlay")?.remove();
+    const ov = document.createElement("div");
+    ov.className = "v4-overlay";
+    const modal = document.createElement("div");
+    modal.className = "v4-modal";
+    modal.innerHTML = `<div class="v4-icon">${icon}</div><div class="v4-title">${title}</div>
+      <div class="v4-sub">${sub}</div>`;
+    const p = document.createElement("button");
+    p.textContent = primary;
+    p.addEventListener("click", () => { ov.remove(); primaryFn(); });
+    modal.appendChild(p);
+    if (secondary) {
+      const s = document.createElement("button");
+      s.className = "alt";
+      s.textContent = secondary;
+      s.addEventListener("click", () => { ov.remove(); secondaryFn ? secondaryFn() : finishGame(); });
+      modal.appendChild(s);
+    }
+    ov.appendChild(modal); document.body.appendChild(ov);
+  }
+
+  function finishGame() {
+    stopTimers(); running = false;
+    document.querySelector(".v4-overlay")?.remove();
+    // Use the existing result screen if present.
+    const result = $("result");
+    if (result) {
+      ["home","how","game","result"].forEach(id => {
+        const el=$(id); if(el) el.classList.toggle("hidden", id!=="result");
+      });
+      if ($("finalScore")) $("finalScore").textContent = score + " points";
+    }
+    // Preserve V3's score submission/share flow.
+    if (typeof window.__srijoneeFinishGame === "function") window.__srijoneeFinishGame(score);
+  }
+
+  function patchStartButtons() {
+    // Remove fragile inline handlers and install robust delegated handling.
+    document.addEventListener("click", e => {
+      const b = e.target.closest("button");
+      if (!b) return;
+      const t = b.textContent.trim().toLowerCase();
+      if (t.includes("start the challenge") || t === "let's play") {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        const game = $("game");
+        if (game) {
+          ["home","how","result"].forEach(id => { const el=$(id); if(el) el.classList.add("hidden"); });
+          game.classList.remove("hidden");
+        }
+        const arena=findArena();
+        if (arena) {
+          buildHUD(arena);
+          level=1; score=0;
+          window.__srijoneeLevelHits=0;
+          startLevel();
+        }
+      }
+    }, true);
+  }
+
+  // Count successful Asur taps per level.
+  document.addEventListener("pointerdown", e => {
+    if (running && e.target.closest(".v4-target")) window.__srijoneeLevelHits++;
+  }, true);
+
+  ensureStyles();
+  patchStartButtons();
+
+  // Public hooks for existing page buttons.
+  window.startGameV4 = () => {
+    const arena=findArena();
+    if (!arena) return;
+    buildHUD(arena); level=1; score=0; window.__srijoneeLevelHits=0; startLevel();
+  };
+})();
+</script>
+
+
+<script>
+(() => {
+  const LEVEL_TIME = 20, TOTAL_LEVELS = 10;
+  const chapters = [
+    ["✈️","Asur lands in Mumbai","Kailash theke Mumbai-te Asur eshe porechhe. Kintu Srijonee Pujo dekhei tar bipod!"],
+    ["🏮","Srijonee Pandal-er kachhe","Asur pandal-er decoration-er modhye lukiyechhe. Khujte hobe!"],
+    ["🌺","Phuler arale Asur","Flowers, lights aar alpana-r modhye Asur nijeke lukochhe."],
+    ["🥁","Dhaak shuru!","Dhaak-er shobde Asur-er matha ghure jacchhe. Ebar dhoro!"],
+    ["😎","Asur-er escape plan","Asur sunglasses pore Mumbai-te palanor chesta korchhe!"],
+    ["🐘","Bal Ganesh-er warning","Bal Ganesh bolechhe: 'Dada, ebar kintu bachbe na!'"],
+    ["🛕","Maa Durga ashchhen","Maa-r arrival-er shomoy hoye eshechhe. Asur-er tension bere gechhe."],
+    ["😰","Asur-er shesh chesta","Asur shobcheye fast hoye gechhe. Dhorte parle-i holo!"],
+    ["🥁","Final Dhaak!","Dhaak bajchhe, lights jolchhe, Srijonee Pujo almost ready!"],
+    ["🌟","Srijonee Pujo begins!","Asur dhora porechhe! Maa eshe gechhen. Ebar celebration!"]
+  ];
+  const decoys = [
+    ["🌺"],["🌺","🪔"],["🌺","🪔","🏮"],["🌺","🪔","🥁","🏮"],
+    ["🌺","🪔","🥁","🏮","⭐"],["🌺","🪔","🥁","🏮","⭐","🍬"],
+    ["🌺","🪔","🥁","🏮","⭐","🍬","🎈"],["🌺","🪔","🥁","🏮","⭐","🍬","🎈","🎨"],
+    ["🌺","🪔","🥁","🏮","⭐","🍬","🎈","🎨","🎯"],["🌺","🪔","🥁","🏮","⭐","🍬","🎈","🎨","🎯","🧿"]
+  ];
+
+  let level=1, score=0, timeLeft=LEVEL_TIME, hits=0, running=false, levelTimer=null, moveTimer=null;
+
+  const $ = id => document.getElementById(id);
+  const arena = () => document.querySelector("#arena,.arena,[data-arena]");
+
+  function injectStyles(){
+    if($("v5-style")) return;
+    const s=document.createElement("style"); s.id="v5-style";
+    s.textContent=`
+      .v5-wrap{margin:0 0 12px}.v5-story{background:#fff8ed;border:1px solid #edd9bd;border-radius:18px;padding:12px 14px;text-align:center}
+      .v5-chapter{font-weight:950;color:#c53030;font-size:18px}.v5-story p{margin:5px 0 0;font-size:13px;line-height:1.4}
+      .v5-hud{display:flex;justify-content:space-between;align-items:center;font-weight:900;margin:10px 0;font-size:14px}
+      .v5-pill{background:#fff0cf;padding:6px 10px;border-radius:999px}.v5-score{color:#c53030}
+      .v5-progress{height:7px;background:#eadfce;border-radius:99px;overflow:hidden;margin-bottom:10px}.v5-progress>i{display:block;height:100%;width:0;background:#c53030}
+      .v5-target,.v5-decoy{position:absolute;width:62px;height:62px;display:flex;align-items:center;justify-content:center;border-radius:50%;
+        font-size:38px;user-select:none;touch-action:manipulation;cursor:pointer;filter:drop-shadow(0 4px 3px #0002)}
+      .v5-target{z-index:5}.v5-decoy{z-index:4}
+      .v5-overlay{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;padding:20px;z-index:99999}
+      .v5-modal{width:min(430px,100%);background:#fff;border-radius:28px;padding:25px 20px;text-align:center;box-shadow:0 20px 70px #0006}
+      .v5-icon{font-size:64px}.v5-modal h2{font-size:34px;color:#c53030;margin:8px 0}.v5-modal p{font-size:15px;line-height:1.45}
+      .v5-modal button{width:100%;margin-top:9px}.v5-modal .secondary{background:#f4e8d8;color:#3d2520}
+      .v5-final{font-weight:900;color:#c53030;font-size:22px}
+    `; document.head.appendChild(s);
+  }
+
+  function showGameScreen(){
+    ["home","how","result"].forEach(id=>{const e=$(id);if(e)e.classList.add("hidden")});
+    const g=$("game"); if(g)g.classList.remove("hidden");
+  }
+
+  function buildUI(){
+    const a=arena(); if(!a)return;
+    a.style.position="relative";
+    const old=document.getElementById("v5-ui"); if(old)old.remove();
+    const ui=document.createElement("div"); ui.id="v5-ui"; ui.className="v5-wrap";
+    ui.innerHTML=`<div class="v5-story"><div class="v5-chapter" id="v5-title"></div><p id="v5-desc"></p></div>
+      <div class="v5-hud"><span class="v5-pill">Level <b id="v5-level">1</b>/10</span><span>⏱ <b id="v5-time">20</b>s</span><span class="v5-score">🏆 <b id="v5-score">0</b></span></div>
+      <div class="v5-progress"><i id="v5-bar"></i></div>`;
+    a.parentNode.insertBefore(ui,a);
+  }
+
+  function place(el){
+    const a=arena(), size=62, pad=8;
+    const x=pad+Math.random()*Math.max(1,a.clientWidth-size-pad*2);
+    const y=pad+Math.random()*Math.max(1,a.clientHeight-size-pad*2);
+    el.style.left=x+"px";el.style.top=y+"px";
+    el.style.transform=`rotate(${Math.round(Math.random()*18-9)}deg)`;
+  }
+
+  function clearTargets(){const a=arena();if(a)a.querySelectorAll(".v5-target,.v5-decoy").forEach(e=>e.remove())}
+
+  function renderLevel(){
+    const a=arena(); if(!a)return;
+    clearTargets();
+    $("v5-title").textContent=chapters[level-1][0]+"  "+chapters[level-1][1];
+    $("v5-desc").textContent=chapters[level-1][2];
+    $("v5-level").textContent=level; $("v5-time").textContent=timeLeft; $("v5-score").textContent=score;
+    $("v5-bar").style.width="0%";
+
+    const target=document.createElement("div"); target.className="v5-target"; target.textContent="👹";
+    target.setAttribute("aria-label","Catch Asur");
+    target.addEventListener("pointerdown",e=>{
+      e.preventDefault(); if(!running)return;
+      hits++; score += 100*level; $("v5-score").textContent=score; place(target);
+      target.animate([{transform:"scale(1.25)"},{transform:"scale(1)"}],{duration:120});
+    });
+    a.appendChild(target); place(target);
+
+    decoys[level-1].forEach(icon=>{
+      const d=document.createElement("div"); d.className="v5-decoy"; d.textContent=icon;
+      d.addEventListener("pointerdown",e=>{
+        e.preventDefault(); if(!running)return;
+        score=Math.max(0,score-25*level); $("v5-score").textContent=score;
+        d.animate([{transform:"scale(.7)"},{transform:"scale(1)"}],{duration:100});
+        place(d);
+      });
+      a.appendChild(d); place(d);
+    });
+  }
+
+  function stop(){clearInterval(levelTimer);clearInterval(moveTimer);levelTimer=moveTimer=null;running=false}
+
+  function startLevel(){
+    const a=arena(); if(!a)return;
+    stop(); running=true; timeLeft=LEVEL_TIME; hits=0; renderLevel();
+    const speed=Math.max(240,820-(level-1)*60);
+    moveTimer=setInterval(()=>{if(running)a.querySelectorAll(".v5-target,.v5-decoy").forEach(place)},speed);
+    levelTimer=setInterval(()=>{
+      timeLeft--; $("v5-time").textContent=timeLeft;
+      $("v5-bar").style.width=((LEVEL_TIME-timeLeft)/LEVEL_TIME*100)+"%";
+      if(timeLeft<=0){stop(); hits>0 ? passed() : failed();}
+    },1000);
+  }
+
+  function modal(icon,title,text,primary,fn,secondary,fn2){
+    document.querySelector(".v5-overlay")?.remove();
+    const o=document.createElement("div");o.className="v5-overlay";
+    const m=document.createElement("div");m.className="v5-modal";
+    m.innerHTML=`<div class="v5-icon">${icon}</div><h2>${title}</h2><p>${text}</p>`;
+    const b=document.createElement("button");b.textContent=primary;b.onclick=()=>{o.remove();fn()};m.appendChild(b);
+    if(secondary){const s=document.createElement("button");s.className="secondary";s.textContent=secondary;s.onclick=()=>{o.remove();fn2?fn2():exitGame()};m.appendChild(s)}
+    o.appendChild(m);document.body.appendChild(o);
+  }
+
+  function passed(){
+    if(level<TOTAL_LEVELS){
+      modal("🥁","Darun!",`Level ${level} crossed! Asur is getting nervous. Ready for Level ${level+1}?`,
+        "NEXT LEVEL",()=>{level++;startLevel();});
+    }else{
+      modal("🥁","Darun!",`You completed all 10 levels! Final score: ${score} points. Maa has arrived and Srijonee Pujo is ready! 🌺`,
+        "VIEW SCORE",()=>finishGame());
+    }
+  }
+
+  function failed(){
+    modal("😢","Dath Teri Ki",`Asur escaped on Level ${level}. Your score is ${score}.`,
+      "PLAY AGAIN",()=>{level=1;score=0;startLevel();},"EXIT",()=>finishGame());
+  }
+
+  function finishGame(){
+    stop(); clearTargets();
+    const r=$("result"); if(r){
+      ["home","how","game"].forEach(id=>{const e=$(id);if(e)e.classList.add("hidden")});
+      r.classList.remove("hidden");
+      if($("finalScore"))$("finalScore").textContent=score+" points";
+      if($("message"))$("message").textContent="Maa Durga has arrived at Srijonee! 🌺";
+    }
+    if(typeof window.__srijoneeFinishGame==="function")window.__srijoneeFinishGame(score);
+  }
+
+  function exitGame(){
+    stop();clearTargets();
+    ["how","game","result"].forEach(id=>{const e=$(id);if(e)e.classList.add("hidden")});
+    const h=$("home");if(h)h.classList.remove("hidden");
+  }
+
+  // Capture the existing V3/V4 buttons robustly. This prevents the earlier non-working button issue.
+  document.addEventListener("click",e=>{
+    const b=e.target.closest("button");if(!b)return;
+    const t=b.textContent.trim().toLowerCase();
+    if(t.includes("start the challenge")||t==="let's play"){
+      e.preventDefault();e.stopImmediatePropagation();showGameScreen();injectStyles();buildUI();level=1;score=0;startLevel();
+    }
+  },true);
+
+  injectStyles();
+})();
+</script>
+
+</body></html>
