@@ -153,7 +153,7 @@ const LEVELS = [
   {icon:"🌟", title:"Asur is caught — Srijonee Pujo begins!", sub:"One last catch and the celebrations can finally begin!",              need:13, decoys:["🌟","🛕","🪔","🌺","🥁"],  size:46, move:340}
 ];
 
-let level = 1, score = 0, hits = 0, timeLeft = LEVEL_TIME;
+let level = 1, score = 0, hits = 0, timeLeft = LEVEL_TIME, cleared = false;
 let running = false, levelTimer = null, moveTimer = null;
 
 const $ = id => document.getElementById(id);
@@ -165,15 +165,6 @@ function show(id){
 function toast(s){
   const e = $('toast'); e.textContent = s; e.classList.add('on');
   setTimeout(() => e.classList.remove('on'), 1300);
-}
-
-function playerId(){
-  let id = localStorage.getItem('srijonee_player_id');
-  if(!id){
-    id = (crypto.randomUUID ? crypto.randomUUID() : 'p-' + Date.now() + '-' + Math.random().toString(16).slice(2));
-    localStorage.setItem('srijonee_player_id', id);
-  }
-  return id;
 }
 
 // ---------- Game flow ----------
@@ -197,6 +188,7 @@ function startLevel(){
   stopTimers();
   running = true;
   hits = 0;
+  cleared = false;
   timeLeft = LEVEL_TIME;
 
   const c = LEVELS[level - 1];
@@ -270,9 +262,9 @@ function catchAsur(el, c){
   el.animate([{transform:'scale(1.25)'},{transform:'scale(1)'}], {duration:120});
   placeRandom(el, c.size);
 
-  if(hits >= c.need){
-    stopTimers(); running = false;
-    levelPassed();
+  if(hits >= c.need && !cleared){
+    cleared = true;
+    toast('Level cleared! 🔥 Keep catching for bonus points!');
   }
 }
 
@@ -366,7 +358,7 @@ async function submitScore(){
   let n = $('name').value.trim();
   if(!n) return toast('Please enter your name');
   if(n.length > 24) return toast('Name is too long');
-  const body = {player_id: playerId(), name: n, score: score};
+  const body = {name: n, score: score};
   try{
     const r = await fetch(API_BASE + '/api/scores', {
       method:'POST',
