@@ -1,507 +1,399 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#c53030"><link rel="icon" type="image/png" href="/favicon.png"><meta name="apple-mobile-web-app-title" content="Srijonee"><title>🌺 Srijonee | Catch the Asur</title>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#c53030">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta name="apple-mobile-web-app-title" content="Srijonee">
+<title>🌺 Srijonee | Catch the Asur</title>
 <style>
-:root{--r:#c53030;--g:#d4a017;--c:#fff8ed;--i:#3d2520}*{box-sizing:border-box}body{margin:0;background:var(--c);font-family:system-ui,-apple-system,sans-serif;color:var(--i)}.wrap{max-width:560px;margin:auto;padding:15px}.card{background:#fff;border-radius:24px;padding:18px;box-shadow:0 10px 35px #0001}.brand{text-align:center;border-bottom:1px solid #eee0d0;padding-bottom:12px}.logo{width:72px;height:72px;object-fit:contain;display:block;margin:auto}.bn{font-weight:900;letter-spacing:2px;color:var(--r);font-size:21px}.tag{font-size:12px;color:#76550b;font-weight:800}.hero,.result{text-align:center;padding:18px 5px}.hero h1{font-size:31px;line-height:1.05}.hero p{line-height:1.5}button{width:100%;border:0;border-radius:15px;padding:14px;margin-top:10px;background:var(--r);color:#fff;font-weight:850;font-size:15px}button.alt{background:#f4eadf;color:var(--i)}button.gold{background:var(--g)}.hidden{display:none}.hud{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:14px 0}.hud div{background:#fff7e9;border-radius:12px;text-align:center;padding:8px;font-size:11px;font-weight:800}.hud b{display:block;color:var(--r);font-size:19px}.bar{height:7px;background:#eadfce;border-radius:99px;overflow:hidden;margin-bottom:10px}.bar i{display:block;height:100%;width:0;background:var(--r)}.arena{height:430px;position:relative;overflow:hidden;border-radius:20px;background:linear-gradient(#fff0d3,#f5c778 70%,#d49b59);border:2px solid #ead2ae;touch-action:manipulation}.sun{position:absolute;right:25px;top:22px;width:75px;height:75px;border-radius:50%;background:#ffd86b;box-shadow:0 0 30px #ffd86b99}.ground{position:absolute;bottom:0;left:0;right:0;height:55px;background:#d39a59}.pandal{position:absolute;bottom:55px;left:50%;transform:translateX(-50%);width:150px;height:95px;border:5px solid #c53030;border-bottom:0;border-radius:80px 80px 0 0;background:#fff2df99}.actor{position:absolute;display:flex;align-items:center;justify-content:center;user-select:none;filter:drop-shadow(0 5px 3px #0002);z-index:3}.decoy{z-index:2}.instructions{text-align:center;font-size:12px;color:#76584d;margin:8px}.score{font-size:38px;color:var(--r);font-weight:950}input{width:100%;padding:14px;border:2px solid #ead7c0;border-radius:13px;font-size:16px;margin-top:8px}table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:8px;border-bottom:1px solid #eee0d0;text-align:left}td:last-child,th:last-child{text-align:right}.note{font-size:11px;color:#8b6d60}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#3d2520;color:white;padding:10px 15px;border-radius:99px;opacity:0;transition:.2s}.toast.on{opacity:1}
-</style></head><body><div class="wrap"><div class="card">
-<header class="brand"><img class="logo" src="srijonee-logo.jpeg"><div class="bn">SRIJONEE</div><div class="tag">Celebrating Culture, Serving Society</div></header>
+:root{--r:#c53030;--g:#d4a017;--c:#fff8ed;--i:#3d2520}
+*{box-sizing:border-box}
+body{margin:0;background:var(--c);font-family:system-ui,-apple-system,sans-serif;color:var(--i)}
+.wrap{max-width:560px;margin:auto;padding:15px}
+.card{background:#fff;border-radius:24px;padding:18px;box-shadow:0 10px 35px #0001}
+.brand{text-align:center;border-bottom:1px solid #eee0d0;padding-bottom:12px;margin-bottom:14px}
+.logo{width:64px;height:64px;object-fit:contain;display:block;margin:auto;border-radius:12px}
+.bn{font-weight:900;letter-spacing:2px;color:var(--r);font-size:21px;margin-top:6px}
+.tag{font-size:12px;color:#76550b;font-weight:800}
+.hero,.result{text-align:center;padding:4px 5px 18px}
+.banner{width:100%;border-radius:18px;display:block;margin-bottom:16px;box-shadow:0 8px 24px #0002}
+.hero h1{font-size:26px;line-height:1.15;margin:0 0 8px}
+.hero p{line-height:1.5;margin:0 0 4px}
+button{width:100%;border:0;border-radius:15px;padding:14px;margin-top:10px;background:var(--r);color:#fff;font-weight:850;font-size:15px;cursor:pointer}
+button.alt{background:#f4eadf;color:var(--i)}
+button.gold{background:var(--g)}
+.hidden{display:none}
+.storybar{background:#fff2df;border:1px solid #edd9bd;border-radius:16px;padding:10px 12px;text-align:center;margin-bottom:10px}
+.storybar .ch{font-weight:950;color:var(--r);font-size:16px}
+.storybar p{margin:3px 0 0;font-size:12px;line-height:1.4;color:#6b4c40}
+.hud{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
+.hud div{background:#fff7e9;border-radius:12px;text-align:center;padding:7px 4px;font-size:10px;font-weight:800}
+.hud b{display:block;color:var(--r);font-size:17px}
+.bar{height:7px;background:#eadfce;border-radius:99px;overflow:hidden;margin-bottom:10px}
+.bar i{display:block;height:100%;width:0;background:var(--r);transition:width .15s linear}
+.arena{height:430px;position:relative;overflow:hidden;border-radius:20px;background:linear-gradient(#fff0d3,#f5c778 70%,#d49b59);border:2px solid #ead2ae;touch-action:manipulation}
+.sun{position:absolute;right:25px;top:22px;width:75px;height:75px;border-radius:50%;background:#ffd86b;box-shadow:0 0 30px #ffd86b99}
+.ground{position:absolute;bottom:0;left:0;right:0;height:55px;background:#d39a59}
+.pandal{position:absolute;bottom:55px;left:50%;transform:translateX(-50%);width:150px;height:95px;border:5px solid #c53030;border-bottom:0;border-radius:80px 80px 0 0;background:#fff2df99}
+.actor{position:absolute;display:flex;align-items:center;justify-content:center;user-select:none;filter:drop-shadow(0 5px 3px #0002);z-index:3;border-radius:50%;touch-action:manipulation;cursor:pointer;transition:transform .08s ease}
+.actor.decoy{z-index:2}
+.instructions{text-align:center;font-size:12px;color:#76584d;margin:8px 0 0}
+.score{font-size:38px;color:var(--r);font-weight:950}
+input{width:100%;padding:14px;border:2px solid #ead7c0;border-radius:13px;font-size:16px;margin-top:8px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{padding:8px;border-bottom:1px solid #eee0d0;text-align:left}
+td:last-child,th:last-child{text-align:right}
+.note{font-size:11px;color:#8b6d60}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#3d2520;color:white;padding:10px 15px;border-radius:99px;opacity:0;transition:.2s;z-index:99999;max-width:90vw;text-align:center}
+.toast.on{opacity:1}
+.overlay{position:fixed;inset:0;background:#0007;display:flex;align-items:center;justify-content:center;padding:20px;z-index:9999}
+.modal{width:min(420px,100%);background:#fff;border-radius:26px;padding:26px 22px;text-align:center;box-shadow:0 20px 60px #0005}
+.modal .mi{font-size:60px;line-height:1;margin-bottom:6px}
+.modal h2{font-size:30px;margin:4px 0 8px;color:var(--r)}
+.modal p{font-size:15px;line-height:1.45;margin:0 0 6px}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="card">
 
-<section id="home" class="hero"><h1>🌺 Maa Ashchhen!<br>Catch the Asur</h1><p>Help Srijonee get ready for Durga Pujo. Catch Asur through <b>5 increasingly difficult levels</b> and make the Champions leaderboard.</p><button onclick="start()">START CHALLENGE</button><button class="alt" onclick="show('how')">HOW TO PLAY</button><button class="gold" onclick="leader()">🏆 LEADERBOARD</button></section>
+<header class="brand">
+  <img class="logo" src="srijonee-logo.jpeg" alt="Srijonee">
+  <div class="bn">SRIJONEE</div>
+  <div class="tag">Celebrating Culture, Serving Society</div>
+</header>
 
-<section id="how" class="hero hidden"><h2>How to play</h2><p>Tap the real Asur. Each level gets faster, smaller and more crowded. Decoys appear from Level 2. Don't tap them!</p><button onclick="start()">LET'S PLAY</button><button class="alt" onclick="show('home')">BACK</button></section>
+<section id="home" class="hero">
+  <img class="banner" src="banner.jpg" alt="Catch the Asur — Srijonee Durga Pujo 2026">
+  <p>Help Srijonee catch Asur before he escapes! Play through <b>10 story levels</b> of Srijonee's first Durga Pujo at Kandivali Lokhandwala and climb the live Champions leaderboard.</p>
+  <button onclick="startGame()">START THE CHALLENGE</button>
+  <button class="alt" onclick="show('how')">HOW TO PLAY</button>
+  <button class="gold" onclick="openLeaderboard()">🏆 LEADERBOARD</button>
+</section>
 
-<section id="game" class="hidden"><div class="hud"><div>LEVEL<b id="lv">1</b></div><div>TIME<b id="tm">12</b></div><div>SCORE<b id="sc">0</b></div></div><div class="bar"><i id="prog"></i></div><div id="arena" class="arena"><div class="sun"></div><div class="pandal"></div><div class="ground"></div><div id="actors"></div></div><div class="instructions">Catch the real Asur • avoid the decoys</div></section>
+<section id="how" class="hero hidden">
+  <h2>How to play</h2>
+  <p>Tap Asur 👹 to catch him. Don't tap the decoys — they cost you points! Each level gives you 20 seconds to catch enough Asurs to clear it. A level only ends when time runs out or you hit the target — it never skips ahead on its own.</p>
+  <p style="text-align:left;font-size:13px;line-height:1.7">
+  ✈️ 1. Asur lands in Mumbai<br>
+  🏮 2. He reaches the Srijonee pandal<br>
+  🌺 3. He hides among the decorations<br>
+  🥁 4. The dhaak starts — Asur panics!<br>
+  😎 5. Asur attempts his escape plan<br>
+  🐘 6. Bal Ganesh warns him<br>
+  🛕 7. Maa Durga is arriving<br>
+  😰 8. Asur makes his final escape attempt<br>
+  🥁 9. The Final Dhaak<br>
+  🌟 10. Asur is caught — Srijonee Pujo begins!
+  </p>
+  <button onclick="startGame()">LET'S PLAY</button>
+  <button class="alt" onclick="show('home')">BACK</button>
+</section>
 
-<section id="result" class="result hidden"><img class="logo" src="srijonee-logo.jpeg"><h2 id="title">🏆 Pujo Champion!</h2><div class="score" id="final">0</div><p id="msg"></p><input id="name" maxlength="24" placeholder="Enter your name to register your score"><button onclick="submit()">REGISTER MY SCORE</button><button class="alt" onclick="share()">CHALLENGE A FRIEND ON WHATSAPP</button><button class="gold" onclick="leader()">🏆 VIEW LEADERBOARD</button><button class="alt" onclick="start()">PLAY AGAIN</button></section>
+<section id="game" class="hidden">
+  <div class="storybar"><div class="ch" id="ch">✈️ Asur lands in Mumbai</div><p id="chsub"></p></div>
+  <div class="hud">
+    <div>LEVEL<b id="lv">1/10</b></div>
+    <div>TIME<b id="tm">20</b></div>
+    <div>CAUGHT<b id="ct">0</b></div>
+    <div>SCORE<b id="sc">0</b></div>
+  </div>
+  <div class="bar"><i id="prog"></i></div>
+  <div id="arena" class="arena">
+    <div class="sun"></div><div class="pandal"></div><div class="ground"></div>
+    <div id="actors"></div>
+  </div>
+  <div class="instructions">Catch the real Asur 👹 • avoid the decoys</div>
+</section>
 
-<section id="board" class="result hidden"><img class="logo" src="srijonee-logo.jpeg"><h2>🏆 Srijonee Pujo Champions</h2><div id="scores"></div><button onclick="show('home')">HOME</button><button class="alt" onclick="shareBoard()">SHARE</button><p class="note">Live online leaderboard • independent Srijonee game score database • no member data is used.</p></section>
-</div><p style="text-align:center;font-size:11px;color:#8b6d60">Srijonee Durga Pujo 2026 • Celebrating Culture, Serving Society</p></div><div id="toast" class="toast"></div>
+<section id="result" class="result hidden">
+  <img class="logo" src="srijonee-logo.jpeg" alt="Srijonee">
+  <h2 id="title">🏆 Pujo Champion!</h2>
+  <div class="score" id="final">0</div>
+  <p id="msg"></p>
+  <input id="name" maxlength="24" placeholder="Enter your name to register your score">
+  <button onclick="submitScore()">REGISTER MY SCORE</button>
+  <button class="alt" onclick="share()">CHALLENGE A FRIEND ON WHATSAPP</button>
+  <button class="gold" onclick="openLeaderboard()">🏆 VIEW LEADERBOARD</button>
+  <button class="alt" onclick="startGame()">PLAY AGAIN</button>
+  <button class="alt" onclick="show('home')">HOME</button>
+</section>
+
+<section id="board" class="result hidden">
+  <img class="logo" src="srijonee-logo.jpeg" alt="Srijonee">
+  <h2>🏆 Srijonee Pujo Champions</h2>
+  <div id="scores"></div>
+  <button onclick="show('home')">HOME</button>
+  <button class="alt" onclick="shareBoard()">SHARE</button>
+  <p class="note">Live online leaderboard • independent Srijonee game score database • no member data is used.</p>
+</section>
+
+</div>
+<p style="text-align:center;font-size:11px;color:#8b6d60">Srijonee Durga Pujo 2026 • Celebrating Culture, Serving Society</p>
+</div>
+
+<div id="toast" class="toast"></div>
+
 <script>
 const API_BASE = ''; // Same Cloudflare origin: /api/scores
-const L=[{need:4,t:12,m:850,s:72,d:0,x:1},{need:5,t:12,m:650,s:64,d:1,x:1.2},{need:6,t:11,m:500,s:56,d:2,x:1.5},{need:7,t:10,m:380,s:49,d:3,x:1.9},{need:8,t:10,m:285,s:43,d:4,x:2.5}];
-let lev=0,t=0,hit=0,score=0,timer,move,done=false;
-const $=x=>document.getElementById(x);
-function show(id){['home','how','game','result','board'].forEach(x=>$(x).classList.toggle('hidden',x!==id))}
-function start(){clear();lev=0;score=0;show('game');level()}
-function clear(){clearInterval(timer);clearInterval(move)}
-function level(){if(lev>=L.length)return finish();const c=L[lev];t=c.t;hit=0;done=false;$('lv').textContent=lev+1;$('tm').textContent=t;$('sc').textContent=score;$('prog').style.width='0%';spawn();timer=setInterval(()=>{t--;$('tm').textContent=t;if(t<=0)next()},1000);move=setInterval(()=>document.querySelectorAll('.actor').forEach(pos),c.m)}
-function spawn(){const c=L[lev],r=$('actors');r.innerHTML='';for(let i=0;i<=c.d;i++){let e=document.createElement('div');e.className='actor '+(i?'decoy':'real');e.textContent=i?'👺':'👹';e.dataset.real=i?'0':'1';e.style.width=e.style.height=c.s+'px';e.style.fontSize=c.s*.78+'px';e.addEventListener('pointerdown',a=>{a.preventDefault();catchIt(e)});r.appendChild(e);pos(e)}}
-function pos(e){const c=L[lev],a=$('arena'),x=8+Math.random()*(a.clientWidth-c.s-16),y=75+Math.random()*(a.clientHeight-c.s-115);e.style.left=x+'px';e.style.top=y+'px';e.style.transform='rotate('+(Math.random()*18-9)+'deg)'}
-function catchIt(e){if(done)return;if(e.dataset.real==='1'){hit++;score+=Math.round(100*L[lev].x+t*4);$('sc').textContent=score;$('prog').style.width=(hit/L[lev].need*100)+'%';pos(e);if(hit>=L[lev].need)next()}else{score=Math.max(0,score-75);$('sc').textContent=score;toast('Oops! Decoy Asur 😈  −75')}}
-function next(){if(done)return;done=true;clear();if(lev===L.length-1){finish();return}toast('Level '+(lev+1)+' cleared! 🔥');setTimeout(()=>{lev++;level()},600)}
-function finish(){clear();show('result');$('final').textContent=score+' points';$('title').textContent=score>=1800?'🏆 Pujo Champion!':'🌺 Pujo Ready!';$('msg').textContent=score>=1800?'Asur is officially worried! You conquered all 10 levels.':score>=900?'Excellent! Your fingers are ready for Pujo!':'Asur escaped this time — try again and beat your score!'}
-async function leader(){show('board');$('scores').innerHTML='<p>Loading live leaderboard…</p>';try{const r=await fetch(API_BASE+'/api/scores?limit=10',{headers:{'Accept':'application/json'}});if(!r.ok)throw new Error('leaderboard');const b=await r.json();$('scores').innerHTML=b.length?'<table><tr><th>#</th><th>Name</th><th>Score</th></tr>'+b.map((x,i)=>'<tr><td>'+(i+1)+'</td><td>'+safe(x.name)+'</td><td><b>'+Number(x.score).toLocaleString()+'</b></td></tr>').join('')+'</table>':'<p>Be the first Srijonee Pujo Champion!</p>'}catch(e){$('scores').innerHTML='<p>Leaderboard is temporarily unavailable. Please try again.</p>'}}
-async function submit(){let n=$('name').value.trim();if(!n)return toast('Please enter your name');if(n.length>24)return toast('Name is too long');let b={name:n,score:score};try{const r=await fetch(API_BASE+'/api/scores',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(b)});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'submit');toast('Score registered! 🏆');setTimeout(()=>leader(),500)}catch(e){toast('Could not register score. Try again.')}}
-function safe(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
-function share(){let n=$('name').value.trim()||'I';let txt=`🌺 ${n} scored ${score} points in Srijonee Durga Pujo 2026 — Catch the Asur!\n\nCan you beat my score? 😎\n\nPlay: ${location.href}\n\nSrijonee • Celebrating Culture, Serving Society`;window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank')}
-function shareBoard(){window.open('https://wa.me/?text='+encodeURIComponent('🏆 Srijonee Pujo Challenge! Can you catch Asur and make the leaderboard? 🌺\n\nPlay: '+location.href),'_blank')}
-function toast(s){let e=$('toast');e.textContent=s;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1200)}
-</script>
-<script>
-(() => {
-  const LEVEL_TIME = 20;
-  const TOTAL_LEVELS = 10;
+const LEVEL_TIME = 20;
 
-  // Different decoys progressively increase complexity.
-  const decoysByLevel = [
-    ["🌺"],
-    ["🌺","🪔"],
-    ["🌺","🪔","🥁"],
-    ["🌺","🪔","🥁","🍎"],
-    ["🌺","🪔","🥁","🍎","⭐"],
-    ["🌺","🪔","🥁","🍎","⭐","🍬"],
-    ["🌺","🪔","🥁","🍎","⭐","🍬","🎈"],
-    ["🌺","🪔","🥁","🍎","⭐","🍬","🎈","🎨"],
-    ["🌺","🪔","🥁","🍎","⭐","🍬","🎈","🎨","🎯"],
-    ["🌺","🪔","🥁","🍎","⭐","🍬","🎈","🎨","🎯","🧿"]
-  ];
+// Storyline exactly as specified. need = Asurs to catch to clear the level.
+const LEVELS = [
+  {icon:"✈️", title:"Asur lands in Mumbai",            sub:"Fresh off the flight, Asur wanders into Kandivali Lokhandwala.",           need:4,  decoys:[],                         size:76, move:900},
+  {icon:"🏮", title:"He reaches the Srijonee pandal",   sub:"Lanterns everywhere — but that won't save him.",                          need:5,  decoys:["🏮"],                     size:72, move:840},
+  {icon:"🌺", title:"He hides among the decorations",   sub:"Flowers and diyas make good cover... almost.",                            need:6,  decoys:["🌺","🪔"],                size:68, move:780},
+  {icon:"🥁", title:"The dhaak starts — Asur panics!",  sub:"The beat rattles his nerves. He's moving faster now.",                    need:7,  decoys:["🌺","🪔","🥁"],           size:64, move:700},
+  {icon:"😎", title:"Asur attempts his escape plan",    sub:"Sunglasses on, Asur tries to slip away unnoticed.",                       need:8,  decoys:["🕶️","🌺","🪔"],          size:60, move:640},
+  {icon:"🐘", title:"Bal Ganesh warns him",              sub:"\"Dada, you're not getting away this time!\"",                            need:9,  decoys:["🐘","🥁","🌺","🪔"],      size:57, move:580},
+  {icon:"🛕", title:"Maa Durga is arriving",             sub:"The pandal is buzzing — Asur has nowhere left to hide.",                  need:10, decoys:["🛕","🪔","🌺","🥁"],      size:54, move:520},
+  {icon:"😰", title:"Asur makes his final escape attempt", sub:"Sweating and desperate, he makes his last dash.",                       need:11, decoys:["🕶️","🛕","🪔","🌺","🥁"], size:51, move:460},
+  {icon:"🥁", title:"The Final Dhaak",                   sub:"Every drumbeat brings the crowd closer to catching him.",                 need:12, decoys:["🥁","🛕","🪔","🌺","⭐"],  size:48, move:400},
+  {icon:"🌟", title:"Asur is caught — Srijonee Pujo begins!", sub:"One last catch and the celebrations can finally begin!",              need:13, decoys:["🌟","🛕","🪔","🌺","🥁"],  size:46, move:340}
+];
 
-  let level = 1, score = 0, timeLeft = LEVEL_TIME;
-  let levelTimer = null, moveTimer = null, running = false;
-  let misses = 0;
+let level = 1, score = 0, hits = 0, timeLeft = LEVEL_TIME;
+let running = false, levelTimer = null, moveTimer = null;
 
-  const $ = id => document.getElementById(id);
-  const byText = (selector, text) => [...document.querySelectorAll(selector)]
-      .find(el => el.textContent.trim().toLowerCase() === text.toLowerCase());
+const $ = id => document.getElementById(id);
 
-  function ensureStyles() {
-    if (document.getElementById("v4-style")) return;
-    const s = document.createElement("style");
-    s.id = "v4-style";
-    s.textContent = `
-      .v4-hud{display:flex;justify-content:space-between;align-items:center;gap:10px;
-        font-weight:900;margin:10px 0;font-size:16px}
-      .v4-level{background:#fff0cf;border-radius:999px;padding:7px 11px;color:#76550b}
-      .v4-score{color:#c53030}
-      .v4-timer{font-variant-numeric:tabular-nums}
-      .v4-target,.v4-decoy{position:absolute;display:flex;align-items:center;justify-content:center;
-        width:68px;height:68px;border-radius:50%;user-select:none;touch-action:manipulation;
-        cursor:pointer;filter:drop-shadow(0 5px 3px #0002);font-size:42px;
-        transition:transform .08s ease}
-      .v4-target{z-index:5}
-      .v4-decoy{z-index:4}
-      .v4-overlay{position:fixed;inset:0;background:#0007;display:flex;align-items:center;
-        justify-content:center;padding:20px;z-index:10000}
-      .v4-modal{width:min(420px,100%);background:#fff;border-radius:26px;padding:28px 22px;
-        text-align:center;box-shadow:0 20px 60px #0005}
-      .v4-icon{font-size:68px;line-height:1;margin-bottom:10px}
-      .v4-title{font-size:36px;font-weight:950;margin:5px 0 8px;color:#c53030}
-      .v4-sub{font-size:16px;line-height:1.45;margin-bottom:16px}
-      .v4-modal button{width:100%;margin-top:10px}
-      .v4-progress{height:8px;background:#eadfce;border-radius:999px;overflow:hidden;margin:8px 0 14px}
-      .v4-progress > div{height:100%;background:#c53030;width:0;transition:width .2s linear}
-    `;
-    document.head.appendChild(s);
+function show(id){
+  ['home','how','game','result','board'].forEach(x => $(x).classList.toggle('hidden', x !== id));
+}
+
+function toast(s){
+  const e = $('toast'); e.textContent = s; e.classList.add('on');
+  setTimeout(() => e.classList.remove('on'), 1300);
+}
+
+function playerId(){
+  let id = localStorage.getItem('srijonee_player_id');
+  if(!id){
+    id = (crypto.randomUUID ? crypto.randomUUID() : 'p-' + Date.now() + '-' + Math.random().toString(16).slice(2));
+    localStorage.setItem('srijonee_player_id', id);
   }
+  return id;
+}
 
-  function findArena() {
-    return document.querySelector("#arena,.arena,[data-arena]") || document.querySelector("main");
-  }
+// ---------- Game flow ----------
 
-  function setTextCandidates(map) {
-    // Best-effort compatibility with V3 IDs; if absent, create HUD in the game section.
-    if ($("level")) $("level").textContent = level;
-    if ($("time")) $("time").textContent = timeLeft;
-    if ($("score")) $("score").textContent = score;
-  }
+function startGame(){
+  closeModal();
+  clearTimers();
+  level = 1; score = 0;
+  show('game');
+  startLevel();
+}
 
-  function buildHUD(arena) {
-    const old = document.getElementById("v4-hud");
-    if (old) old.remove();
-    const hud = document.createElement("div");
-    hud.id = "v4-hud";
-    hud.className = "v4-hud";
-    hud.innerHTML = `
-      <span class="v4-level">Level <b id="v4-level">1</b>/10</span>
-      <span class="v4-timer">⏱ <b id="v4-time">20</b>s</span>
-      <span class="v4-score">🏆 <b id="v4-score">0</b></span>`;
-    arena.parentNode.insertBefore(hud, arena);
-    const prog = document.createElement("div");
-    prog.id = "v4-progress";
-    prog.className = "v4-progress";
-    prog.innerHTML = "<div></div>";
-    arena.parentNode.insertBefore(prog, arena);
-  }
+function stopTimers(){
+  clearInterval(levelTimer); clearInterval(moveTimer);
+  levelTimer = null; moveTimer = null;
+}
+function clearTimers(){ stopTimers(); running = false; }
 
-  function clearArena(arena) {
-    arena.querySelectorAll(".v4-target,.v4-decoy").forEach(e => e.remove());
-  }
+function startLevel(){
+  closeModal();
+  stopTimers();
+  running = true;
+  hits = 0;
+  timeLeft = LEVEL_TIME;
 
-  function randomPos(arena, size=68) {
-    const pad = 8;
-    const w = Math.max(0, arena.clientWidth - size - pad*2);
-    const h = Math.max(0, arena.clientHeight - size - pad*2);
-    return {x: pad + Math.random()*w, y: pad + Math.random()*h};
-  }
+  const c = LEVELS[level - 1];
+  $('ch').textContent = c.icon + ' ' + c.title;
+  $('chsub').textContent = c.sub;
+  $('lv').textContent = level + '/' + LEVELS.length;
+  $('tm').textContent = timeLeft;
+  $('ct').textContent = hits + '/' + c.need;
+  $('sc').textContent = score;
+  $('prog').style.width = '0%';
 
-  function place(el, arena) {
-    const p = randomPos(arena, 68);
-    el.style.left = p.x + "px";
-    el.style.top = p.y + "px";
-    el.style.transform = `rotate(${Math.round(Math.random()*20-10)}deg)`;
-  }
+  spawnActors(c);
 
-  function spawn(arena) {
-    clearArena(arena);
-    const target = document.createElement("div");
-    target.className = "v4-target";
-    target.textContent = "👹";
-    target.setAttribute("aria-label","Catch Asur");
-    target.addEventListener("pointerdown", e => {
-      e.preventDefault();
-      if (!running) return;
-      score += 100 * level;
-      misses = 0;
-      updateHUD();
-      place(target, arena);
-    });
-    arena.appendChild(target);
+  moveTimer = setInterval(() => {
+    if(!running) return;
+    document.querySelectorAll('#actors .actor').forEach(el => placeRandom(el, c.size));
+  }, c.move);
 
-    // Add one more decoy at each new level, with level-specific icons.
-    const decoys = decoysByLevel[level-1];
-    decoys.forEach(icon => {
-      const d = document.createElement("div");
-      d.className = "v4-decoy";
-      d.textContent = icon;
-      d.addEventListener("pointerdown", e => {
-        e.preventDefault();
-        if (!running) return;
-        misses++;
-        score = Math.max(0, score - 25 * level);
-        updateHUD();
-        d.style.transform = "scale(.75) rotate(18deg)";
-        setTimeout(() => { if (running) place(d, arena); }, 100);
-      });
-      arena.appendChild(d);
-      place(d, arena);
-    });
-    place(target, arena);
-  }
-
-  function updateHUD() {
-    const a = $("v4-level"), b = $("v4-time"), c = $("v4-score");
-    if (a) a.textContent = level;
-    if (b) b.textContent = timeLeft;
-    if (c) c.textContent = score;
-    const bar = document.querySelector("#v4-progress > div");
-    if (bar) bar.style.width = `${((LEVEL_TIME-timeLeft)/LEVEL_TIME)*100}%`;
-    setTextCandidates();
-  }
-
-  function stopTimers() {
-    clearInterval(levelTimer); clearInterval(moveTimer);
-    levelTimer = moveTimer = null;
-  }
-
-  function startLevel() {
-    const arena = findArena();
-    if (!arena) return;
-    running = true;
-    timeLeft = LEVEL_TIME;
-    misses = 0;
-    clearArena(arena);
-    spawn(arena);
-    updateHUD();
-
-    stopTimers();
-    // Speed increases by level: Asur/decoys reposition more often.
-    const moveEvery = Math.max(260, 850 - (level-1)*65);
-    moveTimer = setInterval(() => {
-      if (!running) return;
-      arena.querySelectorAll(".v4-target,.v4-decoy").forEach(e => place(e, arena));
-    }, moveEvery);
-
-    levelTimer = setInterval(() => {
-      timeLeft--;
-      updateHUD();
-      if (timeLeft <= 0) {
-        stopTimers();
-        running = false;
-        // A level is passed if the player caught Asur at least once.
-        const caught = score > 0; // score is cumulative, so this is true after any successful catch
-        // Track success per level separately.
-        const success = window.__srijoneeLevelHits > 0;
-        window.__srijoneeLevelHits = 0;
-        success ? levelPassed() : levelFailed();
-      }
-    },1000);
-  }
-
-  function levelPassed() {
-    showModal(
-      "🥁",
-      "Darun!",
-      level < TOTAL_LEVELS
-        ? `Level ${level} crossed! Asur is getting nervous.`
-        : `You conquered all 10 levels! Your final score is ${score}.`,
-      level < TOTAL_LEVELS ? "NEXT LEVEL" : "VIEW SCORE",
-      () => {
-        if (level < TOTAL_LEVELS) { level++; startLevel(); }
-        else finishGame();
-      },
-      level < TOTAL_LEVELS ? null : "DONE"
-    );
-  }
-
-  function levelFailed() {
-    showModal(
-      "😢",
-      "Dath Teri Ki",
-      `Asur escaped on Level ${level}. Your score is ${score}.`,
-      "PLAY AGAIN",
-      () => { level = 1; score = 0; startLevel(); },
-      "EXIT",
-      () => finishGame()
-    );
-  }
-
-  function showModal(icon,title,sub,primary,primaryFn,secondary,secondaryFn) {
-    document.querySelector(".v4-overlay")?.remove();
-    const ov = document.createElement("div");
-    ov.className = "v4-overlay";
-    const modal = document.createElement("div");
-    modal.className = "v4-modal";
-    modal.innerHTML = `<div class="v4-icon">${icon}</div><div class="v4-title">${title}</div>
-      <div class="v4-sub">${sub}</div>`;
-    const p = document.createElement("button");
-    p.textContent = primary;
-    p.addEventListener("click", () => { ov.remove(); primaryFn(); });
-    modal.appendChild(p);
-    if (secondary) {
-      const s = document.createElement("button");
-      s.className = "alt";
-      s.textContent = secondary;
-      s.addEventListener("click", () => { ov.remove(); secondaryFn ? secondaryFn() : finishGame(); });
-      modal.appendChild(s);
+  levelTimer = setInterval(() => {
+    if(!running) return;
+    timeLeft--;
+    $('tm').textContent = Math.max(0, timeLeft);
+    if(timeLeft <= 0){
+      stopTimers(); running = false;
+      if(hits >= c.need) levelPassed(); else levelFailed();
     }
-    ov.appendChild(modal); document.body.appendChild(ov);
-  }
+  }, 1000);
+}
 
-  function finishGame() {
+function spawnActors(c){
+  const r = $('actors');
+  r.innerHTML = '';
+
+  const target = document.createElement('div');
+  target.className = 'actor real';
+  target.textContent = '👹';
+  target.style.width = target.style.height = c.size + 'px';
+  target.style.fontSize = (c.size * 0.72) + 'px';
+  target.addEventListener('pointerdown', e => { e.preventDefault(); catchAsur(target, c); });
+  r.appendChild(target);
+  placeRandom(target, c.size);
+
+  c.decoys.forEach(icon => {
+    const d = document.createElement('div');
+    d.className = 'actor decoy';
+    d.textContent = icon;
+    d.style.width = d.style.height = c.size + 'px';
+    d.style.fontSize = (c.size * 0.66) + 'px';
+    d.addEventListener('pointerdown', e => { e.preventDefault(); catchDecoy(d, c); });
+    r.appendChild(d);
+    placeRandom(d, c.size);
+  });
+}
+
+function placeRandom(el, size){
+  const a = $('arena');
+  const x = 8 + Math.random() * Math.max(1, a.clientWidth - size - 16);
+  const y = 75 + Math.random() * Math.max(1, a.clientHeight - size - 115);
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  el.style.transform = 'rotate(' + (Math.random() * 18 - 9) + 'deg)';
+}
+
+function catchAsur(el, c){
+  if(!running) return;
+  hits++;
+  score += 60 + level * 15 + Math.round(timeLeft * 2);
+  $('sc').textContent = score;
+  $('ct').textContent = hits + '/' + c.need;
+  $('prog').style.width = Math.min(100, (hits / c.need) * 100) + '%';
+  el.animate([{transform:'scale(1.25)'},{transform:'scale(1)'}], {duration:120});
+  placeRandom(el, c.size);
+
+  if(hits >= c.need){
     stopTimers(); running = false;
-    document.querySelector(".v4-overlay")?.remove();
-    // Use the existing result screen if present.
-    const result = $("result");
-    if (result) {
-      ["home","how","game","result"].forEach(id => {
-        const el=$(id); if(el) el.classList.toggle("hidden", id!=="result");
-      });
-      if ($("finalScore")) $("finalScore").textContent = score + " points";
-    }
-    // Preserve V3's score submission/share flow.
-    if (typeof window.__srijoneeFinishGame === "function") window.__srijoneeFinishGame(score);
+    levelPassed();
   }
+}
 
-  function patchStartButtons() {
-    // Remove fragile inline handlers and install robust delegated handling.
-    document.addEventListener("click", e => {
-      const b = e.target.closest("button");
-      if (!b) return;
-      const t = b.textContent.trim().toLowerCase();
-      if (t.includes("start the challenge") || t === "let's play") {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        const game = $("game");
-        if (game) {
-          ["home","how","result"].forEach(id => { const el=$(id); if(el) el.classList.add("hidden"); });
-          game.classList.remove("hidden");
-        }
-        const arena=findArena();
-        if (arena) {
-          buildHUD(arena);
-          level=1; score=0;
-          window.__srijoneeLevelHits=0;
-          startLevel();
-        }
-      }
-    }, true);
+function catchDecoy(el, c){
+  if(!running) return;
+  score = Math.max(0, score - (20 + level * 5));
+  $('sc').textContent = score;
+  el.animate([{transform:'scale(.72)'},{transform:'scale(1)'}], {duration:100});
+  toast('Oops! That\'s not Asur 😅');
+  placeRandom(el, c.size);
+}
+
+// ---------- Decision screens ----------
+
+function levelPassed(){
+  const c = LEVELS[level - 1];
+  if(level < LEVELS.length){
+    modal('🥁', 'Darun!',
+      `Level ${level} crossed — ${c.title}! Score so far: ${score}.`,
+      [
+        {label:'NEXT LEVEL', cls:'', fn:() => { level++; startLevel(); }},
+        {label:'EXIT', cls:'alt', fn:() => exitToResult()}
+      ]);
+  } else {
+    modal('🌟', 'Asur is caught!',
+      `Maa Durga has arrived and Srijonee Pujo begins! Final score: ${score} points.`,
+      [
+        {label:'VIEW MY SCORE', cls:'', fn:() => exitToResult()}
+      ]);
   }
+}
 
-  // Count successful Asur taps per level.
-  document.addEventListener("pointerdown", e => {
-    if (running && e.target.closest(".v4-target")) window.__srijoneeLevelHits++;
-  }, true);
+function levelFailed(){
+  const c = LEVELS[level - 1];
+  modal('😢', 'Dath Teri Ki',
+    `Asur escaped on Level ${level} — ${c.title}. You caught ${hits}/${c.need}. Score: ${score}.`,
+    [
+      {label:'PLAY AGAIN', cls:'', fn:() => startLevel()},
+      {label:'EXIT', cls:'alt', fn:() => exitToResult()}
+    ]);
+}
 
-  ensureStyles();
-  patchStartButtons();
+function modal(icon, title, text, buttons){
+  closeModal();
+  const o = document.createElement('div'); o.className = 'overlay'; o.id = 'ov';
+  const m = document.createElement('div'); m.className = 'modal';
+  m.innerHTML = `<div class="mi">${icon}</div><h2>${title}</h2><p>${text}</p>`;
+  buttons.forEach(b => {
+    const btn = document.createElement('button');
+    if(b.cls) btn.className = b.cls;
+    btn.textContent = b.label;
+    btn.onclick = () => { closeModal(); b.fn(); };
+    m.appendChild(btn);
+  });
+  o.appendChild(m);
+  document.body.appendChild(o);
+}
+function closeModal(){ $('ov')?.remove(); }
 
-  // Public hooks for existing page buttons.
-  window.startGameV4 = () => {
-    const arena=findArena();
-    if (!arena) return;
-    buildHUD(arena); level=1; score=0; window.__srijoneeLevelHits=0; startLevel();
-  };
-})();
-</script>
+function exitToResult(){
+  clearTimers();
+  closeModal();
+  show('result');
+  $('final').textContent = score + ' points';
+  $('title').textContent = score >= 2200 ? '🏆 Pujo Champion!' : '🌺 Pujo Ready!';
+  $('msg').textContent = level >= LEVELS.length && hits >= LEVELS[LEVELS.length-1].need
+    ? 'Asur is caught — Srijonee Pujo begins! 🌟'
+    : `You reached Level ${level} of ${LEVELS.length}. Register your score and try to beat it!`;
+}
 
+// ---------- Leaderboard ----------
 
-<script>
-(() => {
-  const LEVEL_TIME = 20, TOTAL_LEVELS = 10;
-  const chapters = [
-    ["✈️","Asur lands in Mumbai","Kailash theke Mumbai-te Asur eshe porechhe. Kintu Srijonee Pujo dekhei tar bipod!"],
-    ["🏮","Srijonee Pandal-er kachhe","Asur pandal-er decoration-er modhye lukiyechhe. Khujte hobe!"],
-    ["🌺","Phuler arale Asur","Flowers, lights aar alpana-r modhye Asur nijeke lukochhe."],
-    ["🥁","Dhaak shuru!","Dhaak-er shobde Asur-er matha ghure jacchhe. Ebar dhoro!"],
-    ["😎","Asur-er escape plan","Asur sunglasses pore Mumbai-te palanor chesta korchhe!"],
-    ["🐘","Bal Ganesh-er warning","Bal Ganesh bolechhe: 'Dada, ebar kintu bachbe na!'"],
-    ["🛕","Maa Durga ashchhen","Maa-r arrival-er shomoy hoye eshechhe. Asur-er tension bere gechhe."],
-    ["😰","Asur-er shesh chesta","Asur shobcheye fast hoye gechhe. Dhorte parle-i holo!"],
-    ["🥁","Final Dhaak!","Dhaak bajchhe, lights jolchhe, Srijonee Pujo almost ready!"],
-    ["🌟","Srijonee Pujo begins!","Asur dhora porechhe! Maa eshe gechhen. Ebar celebration!"]
-  ];
-  const decoys = [
-    ["🌺"],["🌺","🪔"],["🌺","🪔","🏮"],["🌺","🪔","🥁","🏮"],
-    ["🌺","🪔","🥁","🏮","⭐"],["🌺","🪔","🥁","🏮","⭐","🍬"],
-    ["🌺","🪔","🥁","🏮","⭐","🍬","🎈"],["🌺","🪔","🥁","🏮","⭐","🍬","🎈","🎨"],
-    ["🌺","🪔","🥁","🏮","⭐","🍬","🎈","🎨","🎯"],["🌺","🪔","🥁","🏮","⭐","🍬","🎈","🎨","🎯","🧿"]
-  ];
-
-  let level=1, score=0, timeLeft=LEVEL_TIME, hits=0, running=false, levelTimer=null, moveTimer=null;
-
-  const $ = id => document.getElementById(id);
-  const arena = () => document.querySelector("#arena,.arena,[data-arena]");
-
-  function injectStyles(){
-    if($("v5-style")) return;
-    const s=document.createElement("style"); s.id="v5-style";
-    s.textContent=`
-      .v5-wrap{margin:0 0 12px}.v5-story{background:#fff8ed;border:1px solid #edd9bd;border-radius:18px;padding:12px 14px;text-align:center}
-      .v5-chapter{font-weight:950;color:#c53030;font-size:18px}.v5-story p{margin:5px 0 0;font-size:13px;line-height:1.4}
-      .v5-hud{display:flex;justify-content:space-between;align-items:center;font-weight:900;margin:10px 0;font-size:14px}
-      .v5-pill{background:#fff0cf;padding:6px 10px;border-radius:999px}.v5-score{color:#c53030}
-      .v5-progress{height:7px;background:#eadfce;border-radius:99px;overflow:hidden;margin-bottom:10px}.v5-progress>i{display:block;height:100%;width:0;background:#c53030}
-      .v5-target,.v5-decoy{position:absolute;width:62px;height:62px;display:flex;align-items:center;justify-content:center;border-radius:50%;
-        font-size:38px;user-select:none;touch-action:manipulation;cursor:pointer;filter:drop-shadow(0 4px 3px #0002)}
-      .v5-target{z-index:5}.v5-decoy{z-index:4}
-      .v5-overlay{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;padding:20px;z-index:99999}
-      .v5-modal{width:min(430px,100%);background:#fff;border-radius:28px;padding:25px 20px;text-align:center;box-shadow:0 20px 70px #0006}
-      .v5-icon{font-size:64px}.v5-modal h2{font-size:34px;color:#c53030;margin:8px 0}.v5-modal p{font-size:15px;line-height:1.45}
-      .v5-modal button{width:100%;margin-top:9px}.v5-modal .secondary{background:#f4e8d8;color:#3d2520}
-      .v5-final{font-weight:900;color:#c53030;font-size:22px}
-    `; document.head.appendChild(s);
+async function openLeaderboard(){
+  show('board');
+  $('scores').innerHTML = '<p>Loading live leaderboard…</p>';
+  try{
+    const r = await fetch(API_BASE + '/api/scores?limit=10', {headers:{'Accept':'application/json'}});
+    if(!r.ok) throw new Error('leaderboard');
+    const b = await r.json();
+    $('scores').innerHTML = b.length
+      ? '<table><tr><th>#</th><th>Name</th><th>Score</th></tr>' +
+        b.map((x,i) => `<tr><td>${i+1}</td><td>${safe(x.name)}</td><td><b>${Number(x.score).toLocaleString()}</b></td></tr>`).join('') +
+        '</table>'
+      : '<p>Be the first Srijonee Pujo Champion!</p>';
+  }catch(e){
+    $('scores').innerHTML = '<p>Leaderboard is temporarily unavailable. Please try again.</p>';
   }
+}
 
-  function showGameScreen(){
-    ["home","how","result"].forEach(id=>{const e=$(id);if(e)e.classList.add("hidden")});
-    const g=$("game"); if(g)g.classList.remove("hidden");
-  }
-
-  function buildUI(){
-    const a=arena(); if(!a)return;
-    a.style.position="relative";
-    const old=document.getElementById("v5-ui"); if(old)old.remove();
-    const ui=document.createElement("div"); ui.id="v5-ui"; ui.className="v5-wrap";
-    ui.innerHTML=`<div class="v5-story"><div class="v5-chapter" id="v5-title"></div><p id="v5-desc"></p></div>
-      <div class="v5-hud"><span class="v5-pill">Level <b id="v5-level">1</b>/10</span><span>⏱ <b id="v5-time">20</b>s</span><span class="v5-score">🏆 <b id="v5-score">0</b></span></div>
-      <div class="v5-progress"><i id="v5-bar"></i></div>`;
-    a.parentNode.insertBefore(ui,a);
-  }
-
-  function place(el){
-    const a=arena(), size=62, pad=8;
-    const x=pad+Math.random()*Math.max(1,a.clientWidth-size-pad*2);
-    const y=pad+Math.random()*Math.max(1,a.clientHeight-size-pad*2);
-    el.style.left=x+"px";el.style.top=y+"px";
-    el.style.transform=`rotate(${Math.round(Math.random()*18-9)}deg)`;
-  }
-
-  function clearTargets(){const a=arena();if(a)a.querySelectorAll(".v5-target,.v5-decoy").forEach(e=>e.remove())}
-
-  function renderLevel(){
-    const a=arena(); if(!a)return;
-    clearTargets();
-    $("v5-title").textContent=chapters[level-1][0]+"  "+chapters[level-1][1];
-    $("v5-desc").textContent=chapters[level-1][2];
-    $("v5-level").textContent=level; $("v5-time").textContent=timeLeft; $("v5-score").textContent=score;
-    $("v5-bar").style.width="0%";
-
-    const target=document.createElement("div"); target.className="v5-target"; target.textContent="👹";
-    target.setAttribute("aria-label","Catch Asur");
-    target.addEventListener("pointerdown",e=>{
-      e.preventDefault(); if(!running)return;
-      hits++; score += 100*level; $("v5-score").textContent=score; place(target);
-      target.animate([{transform:"scale(1.25)"},{transform:"scale(1)"}],{duration:120});
+async function submitScore(){
+  let n = $('name').value.trim();
+  if(!n) return toast('Please enter your name');
+  if(n.length > 24) return toast('Name is too long');
+  const body = {player_id: playerId(), name: n, score: score};
+  try{
+    const r = await fetch(API_BASE + '/api/scores', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify(body)
     });
-    a.appendChild(target); place(target);
-
-    decoys[level-1].forEach(icon=>{
-      const d=document.createElement("div"); d.className="v5-decoy"; d.textContent=icon;
-      d.addEventListener("pointerdown",e=>{
-        e.preventDefault(); if(!running)return;
-        score=Math.max(0,score-25*level); $("v5-score").textContent=score;
-        d.animate([{transform:"scale(.7)"},{transform:"scale(1)"}],{duration:100});
-        place(d);
-      });
-      a.appendChild(d); place(d);
-    });
+    const j = await r.json().catch(() => ({}));
+    if(!r.ok) throw new Error(j.error || 'submit');
+    toast('Score registered! 🏆');
+    setTimeout(() => openLeaderboard(), 500);
+  }catch(e){
+    toast('Could not register score. Try again.');
   }
+}
 
-  function stop(){clearInterval(levelTimer);clearInterval(moveTimer);levelTimer=moveTimer=null;running=false}
+function safe(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
 
-  function startLevel(){
-    const a=arena(); if(!a)return;
-    stop(); running=true; timeLeft=LEVEL_TIME; hits=0; renderLevel();
-    const speed=Math.max(240,820-(level-1)*60);
-    moveTimer=setInterval(()=>{if(running)a.querySelectorAll(".v5-target,.v5-decoy").forEach(place)},speed);
-    levelTimer=setInterval(()=>{
-      timeLeft--; $("v5-time").textContent=timeLeft;
-      $("v5-bar").style.width=((LEVEL_TIME-timeLeft)/LEVEL_TIME*100)+"%";
-      if(timeLeft<=0){stop(); hits>0 ? passed() : failed();}
-    },1000);
-  }
-
-  function modal(icon,title,text,primary,fn,secondary,fn2){
-    document.querySelector(".v5-overlay")?.remove();
-    const o=document.createElement("div");o.className="v5-overlay";
-    const m=document.createElement("div");m.className="v5-modal";
-    m.innerHTML=`<div class="v5-icon">${icon}</div><h2>${title}</h2><p>${text}</p>`;
-    const b=document.createElement("button");b.textContent=primary;b.onclick=()=>{o.remove();fn()};m.appendChild(b);
-    if(secondary){const s=document.createElement("button");s.className="secondary";s.textContent=secondary;s.onclick=()=>{o.remove();fn2?fn2():exitGame()};m.appendChild(s)}
-    o.appendChild(m);document.body.appendChild(o);
-  }
-
-  function passed(){
-    if(level<TOTAL_LEVELS){
-      modal("🥁","Darun!",`Level ${level} crossed! Asur is getting nervous. Ready for Level ${level+1}?`,
-        "NEXT LEVEL",()=>{level++;startLevel();});
-    }else{
-      modal("🥁","Darun!",`You completed all 10 levels! Final score: ${score} points. Maa has arrived and Srijonee Pujo is ready! 🌺`,
-        "VIEW SCORE",()=>finishGame());
-    }
-  }
-
-  function failed(){
-    modal("😢","Dath Teri Ki",`Asur escaped on Level ${level}. Your score is ${score}.`,
-      "PLAY AGAIN",()=>{level=1;score=0;startLevel();},"EXIT",()=>finishGame());
-  }
-
-  function finishGame(){
-    stop(); clearTargets();
-    const r=$("result"); if(r){
-      ["home","how","game"].forEach(id=>{const e=$(id);if(e)e.classList.add("hidden")});
-      r.classList.remove("hidden");
-      if($("finalScore"))$("finalScore").textContent=score+" points";
-      if($("message"))$("message").textContent="Maa Durga has arrived at Srijonee! 🌺";
-    }
-    if(typeof window.__srijoneeFinishGame==="function")window.__srijoneeFinishGame(score);
-  }
-
-  function exitGame(){
-    stop();clearTargets();
-    ["how","game","result"].forEach(id=>{const e=$(id);if(e)e.classList.add("hidden")});
-    const h=$("home");if(h)h.classList.remove("hidden");
-  }
-
-  // Capture the existing V3/V4 buttons robustly. This prevents the earlier non-working button issue.
-  document.addEventListener("click",e=>{
-    const b=e.target.closest("button");if(!b)return;
-    const t=b.textContent.trim().toLowerCase();
-    if(t.includes("start the challenge")||t==="let's play"){
-      e.preventDefault();e.stopImmediatePropagation();showGameScreen();injectStyles();buildUI();level=1;score=0;startLevel();
-    }
-  },true);
-
-  injectStyles();
-})();
+function share(){
+  let n = $('name').value.trim() || 'I';
+  let txt = `🌺 ${n} scored ${score} points in Srijonee Durga Pujo 2026 — Catch the Asur!\n\nCan you beat my score? 😎\n\nPlay: ${location.href}\n\nSrijonee • Celebrating Culture, Serving Society`;
+  window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
+}
+function shareBoard(){
+  window.open('https://wa.me/?text=' + encodeURIComponent('🏆 Srijonee Pujo Challenge! Can you catch Asur and make the leaderboard? 🌺\n\nPlay: ' + location.href), '_blank');
+}
 </script>
-
-</body></html>
+</body>
+</html>
